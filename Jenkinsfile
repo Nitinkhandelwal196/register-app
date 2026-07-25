@@ -105,10 +105,6 @@ pipeline {
                      mimeType: 'text/html',to: "nkhandelwal196@gmail.com"
       }      
 
-
-
-
-       
                          
   }
 }
