@@ -70,7 +70,11 @@ pipeline {
 	   stage("Trivy Scan") {
            steps {
                script {
-	            sh ('docker run -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image dockerinfo196/register-app-pipeline:latest --no-progress --scanners vuln  --exit-code 0 --severity HIGH,CRITICAL --format table')
+	            sh ('docker run --rm \
+-v /var/run/docker.sock:/var/run/docker.sock \
+aquasec/trivy:0.72.0 image \
+--skip-java-db-update \
+dockerinfo196/register-app-pipeline:latest')
                }
            }
        }
@@ -87,7 +91,7 @@ pipeline {
 	         stage("Trigger CD Pipeline") {
             steps {
                 script {
-                    sh "curl -v -k --user admin:${JENKINS_API_TOKEN} -X POST -H 'cache-control: no-cache' -H 'content-type: application/x-www-form-urlencoded' --data 'IMAGE_TAG=${IMAGE_TAG}' 'http://ec2-13-53-44-168.eu-north-1.compute.amazonaws.com:8080/job/gitops-register-app-cd1/buildWithParameters?token=gitops-token'"
+                    sh "curl -v -k --user admin:${JENKINS_API_TOKEN} -X POST -H 'cache-control: no-cache' -H 'content-type: application/x-www-form-urlencoded' --data 'IMAGE_TAG=${IMAGE_TAG}' 'ec2-13-53-44-168.eu-north-1.compute.amazonaws.com:8080/job/gitops-register-app-cd1/buildWithParameters?token=gitops-token'"
                 }
             }
        }
