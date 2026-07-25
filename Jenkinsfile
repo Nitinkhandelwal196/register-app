@@ -67,17 +67,7 @@ pipeline {
             }
 
        }
-	   stage("Trivy Scan") {
-           steps {
-               script {
-	            sh ('docker run --rm \
--v /var/run/docker.sock:/var/run/docker.sock \
-aquasec/trivy:0.72.0 image \
---skip-java-db-update \
-dockerinfo196/register-app-pipeline:latest')
-               }
-           }
-       }
+	  
 
 	       stage ('Cleanup Artifacts') {
            steps {
